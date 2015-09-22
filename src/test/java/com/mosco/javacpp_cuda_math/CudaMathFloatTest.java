@@ -15,252 +15,302 @@ import static com.mosco.javacpp_cuda_math.AbstractCudaMath.checkResult;
 public class CudaMathFloatTest {
     private static final int N = 2000;
     private static CudaMathFloat cudaMathFloat;
-    private static LongPointer input;
+    private static LongPointer x, y;
     private static LongPointer result;
 
     @Test
     public void testacosf() {
-        cudaMathFloat.acos(N, input, result);
+        cudaMathFloat.acos(N, x, result);
     }
 
     @Test
     public void testacoshf() {
-        cudaMathFloat.acosh(N, input, result);
+        cudaMathFloat.acosh(N, x, result);
     }
 
     @Test
     public void testasinf() {
-        cudaMathFloat.asin(N, input, result);
+        cudaMathFloat.asin(N, x, result);
     }
 
     @Test
     public void testasinhf() {
-        cudaMathFloat.asinh(N, input, result);
+        cudaMathFloat.asinh(N, x, result);
     }
 
     @Test
     public void testatanf() {
-        cudaMathFloat.atan(N, input, result);
+        cudaMathFloat.atan(N, x, result);
     }
 
     @Test
     public void testatanhf() {
-        cudaMathFloat.atanh(N, input, result);
+        cudaMathFloat.atanh(N, x, result);
     }
 
     @Test
     public void testcbrtf() {
-        cudaMathFloat.cbrt(N, input, result);
+        cudaMathFloat.cbrt(N, x, result);
     }
 
     @Test
     public void testceilf() {
-        cudaMathFloat.ceil(N, input, result);
+        cudaMathFloat.ceil(N, x, result);
     }
 
     @Test
     public void testcosf() {
-        cudaMathFloat.cos(N, input, result);
+        cudaMathFloat.cos(N, x, result);
     }
 
     @Test
     public void testcoshf() {
-        cudaMathFloat.cosh(N, input, result);
+        cudaMathFloat.cosh(N, x, result);
     }
 
     @Test
     public void testcospif() {
-        cudaMathFloat.cospi(N, input, result);
+        cudaMathFloat.cospi(N, x, result);
     }
 
     @Test
     public void testcyl_bessel_i0f() {
-        cudaMathFloat.cyl_bessel_i0(N, input, result);
+        cudaMathFloat.cyl_bessel_i0(N, x, result);
     }
 
     @Test
     public void testcyl_bessel_i1f() {
-        cudaMathFloat.cyl_bessel_i1(N, input, result);
+        cudaMathFloat.cyl_bessel_i1(N, x, result);
     }
 
     @Test
     public void testerfcf() {
-        cudaMathFloat.erfc(N, input, result);
+        cudaMathFloat.erfc(N, x, result);
     }
 
     @Test
     public void testerfcinvf() {
-        cudaMathFloat.erfcinv(N, input, result);
+        cudaMathFloat.erfcinv(N, x, result);
     }
 
     @Test
     public void testerfcxf() {
-        cudaMathFloat.erfcx(N, input, result);
+        cudaMathFloat.erfcx(N, x, result);
     }
 
     @Test
     public void testerff() {
-        cudaMathFloat.erf(N, input, result);
+        cudaMathFloat.erf(N, x, result);
     }
 
     @Test
     public void testerfinvf() {
-        cudaMathFloat.erfinv(N, input, result);
+        cudaMathFloat.erfinv(N, x, result);
     }
 
     @Test
     public void testexp10f() {
-        cudaMathFloat.exp10(N, input, result);
+        cudaMathFloat.exp10(N, x, result);
     }
 
     @Test
     public void testexp2f() {
-        cudaMathFloat.exp2(N, input, result);
+        cudaMathFloat.exp2(N, x, result);
     }
 
     @Test
     public void testexpf() {
-        cudaMathFloat.exp(N, input, result);
+        cudaMathFloat.exp(N, x, result);
     }
 
     @Test
     public void testexpm1f() {
-        cudaMathFloat.expm1(N, input, result);
+        cudaMathFloat.expm1(N, x, result);
     }
 
     @Test
     public void testfabsf() {
-        cudaMathFloat.fabs(N, input, result);
+        cudaMathFloat.fabs(N, x, result);
     }
 
     @Test
     public void testfloorf() {
-        cudaMathFloat.floor(N, input, result);
+        cudaMathFloat.floor(N, x, result);
     }
 
     @Test
     public void testj0f() {
-        cudaMathFloat.j0(N, input, result);
+        cudaMathFloat.j0(N, x, result);
     }
 
     @Test
     public void testj1f() {
-        cudaMathFloat.j1(N, input, result);
+        cudaMathFloat.j1(N, x, result);
     }
 
     @Test
     public void testlgammaf() {
-        cudaMathFloat.lgamma(N, input, result);
+        cudaMathFloat.lgamma(N, x, result);
     }
 
     @Test
     public void testlog10f() {
-        cudaMathFloat.log10(N, input, result);
+        cudaMathFloat.log10(N, x, result);
     }
 
     @Test
     public void testlog1pf() {
-        cudaMathFloat.log1p(N, input, result);
+        cudaMathFloat.log1p(N, x, result);
     }
 
     @Test
     public void testlog2f() {
-        cudaMathFloat.log2(N, input, result);
+        cudaMathFloat.log2(N, x, result);
     }
 
     @Test
     public void testlogbf() {
-        cudaMathFloat.logb(N, input, result);
+        cudaMathFloat.logb(N, x, result);
     }
 
     @Test
     public void testlogf() {
-        cudaMathFloat.log(N, input, result);
+        cudaMathFloat.log(N, x, result);
     }
 
     @Test
     public void testnearbyintf() {
-        cudaMathFloat.nearbyint(N, input, result);
+        cudaMathFloat.nearbyint(N, x, result);
     }
 
     @Test
     public void testnormcdff() {
-        cudaMathFloat.normcdf(N, input, result);
+        cudaMathFloat.normcdf(N, x, result);
     }
 
     @Test
     public void testnormcdfinvf() {
-        cudaMathFloat.normcdfinv(N, input, result);
+        cudaMathFloat.normcdfinv(N, x, result);
     }
 
     @Test
     public void testrcbrtf() {
-        cudaMathFloat.rcbrt(N, input, result);
+        cudaMathFloat.rcbrt(N, x, result);
     }
 
     @Test
     public void testrintf() {
-        cudaMathFloat.rint(N, input, result);
+        cudaMathFloat.rint(N, x, result);
     }
 
     @Test
     public void testroundf() {
-        cudaMathFloat.round(N, input, result);
+        cudaMathFloat.round(N, x, result);
     }
 
     @Test
     public void testrsqrtf() {
-        cudaMathFloat.rsqrt(N, input, result);
+        cudaMathFloat.rsqrt(N, x, result);
     }
 
     @Test
     public void testsinf() {
-        cudaMathFloat.sin(N, input, result);
+        cudaMathFloat.sin(N, x, result);
     }
 
     @Test
     public void testsinhf() {
-        cudaMathFloat.sinh(N, input, result);
+        cudaMathFloat.sinh(N, x, result);
     }
 
     @Test
     public void testsinpif() {
-        cudaMathFloat.sinpi(N, input, result);
+        cudaMathFloat.sinpi(N, x, result);
     }
 
     @Test
     public void testsqrtf() {
-        cudaMathFloat.sqrt(N, input, result);
+        cudaMathFloat.sqrt(N, x, result);
     }
 
     @Test
     public void testtanf() {
-        cudaMathFloat.tan(N, input, result);
+        cudaMathFloat.tan(N, x, result);
     }
 
     @Test
     public void testtanhf() {
-        cudaMathFloat.tanh(N, input, result);
+        cudaMathFloat.tanh(N, x, result);
     }
 
     @Test
     public void testtgammaf() {
-        cudaMathFloat.tgamma(N, input, result);
+        cudaMathFloat.tgamma(N, x, result);
     }
 
     @Test
     public void testtruncf() {
-        cudaMathFloat.trunc(N, input, result);
+        cudaMathFloat.trunc(N, x, result);
     }
 
     @Test
     public void testy0f() {
-        cudaMathFloat.y0(N, input, result);
+        cudaMathFloat.y0(N, x, result);
     }
 
     @Test
     public void testy1f() {
-        cudaMathFloat.y1(N, input, result);
+        cudaMathFloat.y1(N, x, result);
+    }
+
+    @Test
+    public void testatan2f() {
+        cudaMathFloat.atan2(N, x, y, result);
+    }
+
+    @Test
+    public void testcopysignf() {
+        cudaMathFloat.copysign(N, x, y, result);
+    }
+
+    @Test
+    public void testfdimf() {
+        cudaMathFloat.fdim(N, x, y, result);
+    }
+
+    @Test
+    public void testfmaxf() {
+        cudaMathFloat.fmax(N, x, y, result);
+    }
+
+    @Test
+    public void testfminf() {
+        cudaMathFloat.fmin(N, x, y, result);
+    }
+
+    @Test
+    public void testfmodf() {
+        cudaMathFloat.fmod(N, x, y, result);
+    }
+
+    @Test
+    public void testnextafterf() {
+        cudaMathFloat.nextafter(N, x, y, result);
+    }
+
+    @Test
+    public void testpowf() {
+        cudaMathFloat.pow(N, x, y, result);
+    }
+
+    @Test
+    public void testremainderf() {
+        cudaMathFloat.remainder(N, x, y, result);
+    }
+
+    @Test
+    public void testrhypotf() {
+        cudaMathFloat.rhypot(N, x, y, result);
     }
 
 
@@ -280,14 +330,23 @@ public class CudaMathFloatTest {
 
         cudaMathFloat = new CudaMathFloat();
 
-        float[] inputArray = new float[N];
+        float[] xArray = new float[N];
         for (int i = 0; i < N; i++) {
-            inputArray[i] = i;
+            xArray[i] = i;
         }
 
-        input = new LongPointer(1);
-        checkResult(cuMemAlloc(input, N * Float.BYTES));
-        checkResult(cuMemcpyHtoD(input.get(), new FloatPointer(inputArray), N * Float.BYTES));
+        x = new LongPointer(1);
+        checkResult(cuMemAlloc(x, N * Float.BYTES));
+        checkResult(cuMemcpyHtoD(x.get(), new FloatPointer(xArray), N * Float.BYTES));
+
+        float[] yArray = new float[N];
+        for (int i = 0; i < N; i++) {
+            yArray[i] = i;
+        }
+
+        y = new LongPointer(1);
+        checkResult(cuMemAlloc(y, N * Float.BYTES));
+        checkResult(cuMemcpyHtoD(y.get(), new FloatPointer(yArray), N * Float.BYTES));
 
         result = new LongPointer(1);
         checkResult(cuMemAlloc(result, N * Float.BYTES));

@@ -76,7 +76,7 @@ import static com.mosco.javacpp_cuda_math.AbstractCudaMath.checkResult;
 public class CudaMath${tc}Test {
     private static final int N = 2000;
     private static CudaMath${tc} cudaMath${tc};
-    private static LongPointer input;
+    private static LongPointer x, y;
     private static LongPointer result;
 
 $body
@@ -96,14 +96,23 @@ $body
 
         cudaMath${tc} = new CudaMath${tc}();
 
-        ${t}[] inputArray = new ${t}[N];
+        ${t}[] xArray = new ${t}[N];
         for (int i = 0; i < N; i++) {
-            inputArray[i] = i;
+            xArray[i] = i;
         }
 
-        input = new LongPointer(1);
-        checkResult(cuMemAlloc(input, N * ${tc}.BYTES));
-        checkResult(cuMemcpyHtoD(input.get(), new ${tc}Pointer(inputArray), N * ${tc}.BYTES));
+        x = new LongPointer(1);
+        checkResult(cuMemAlloc(x, N * ${tc}.BYTES));
+        checkResult(cuMemcpyHtoD(x.get(), new ${tc}Pointer(xArray), N * ${tc}.BYTES));
+
+        ${t}[] yArray = new ${t}[N];
+        for (int i = 0; i < N; i++) {
+            yArray[i] = i;
+        }
+
+        y = new LongPointer(1);
+        checkResult(cuMemAlloc(y, N * ${tc}.BYTES));
+        checkResult(cuMemcpyHtoD(y.get(), new ${tc}Pointer(yArray), N * ${tc}.BYTES));
 
         result = new LongPointer(1);
         checkResult(cuMemAlloc(result, N * ${tc}.BYTES));
@@ -181,19 +190,28 @@ def updateMainJavaFile(results, nType):
         file.truncate()
 
 
-def updateTestJavaFile(fNames, nType):
+def updateTestJavaFile(results, nType):
     with open('src/test/java/com/mosco/javacpp_cuda_math/CudaMath' + nType.capitalize() + 'Test.java', 'w+') as file:
         file.seek(0)
-        funt = Template("""    @Test
+        body = ''
+        one_t = Template("""    @Test
     public void test${fName}() {
-        cudaMath${tc}.${fNameM}(N, input, result);
+        cudaMath${tc}.${fNameM}(N, x, result);
     }
 
 """)
-        body = ''
-        for fName in fNames:
-            body += funt.substitute(fName=fName, fNameM=fName[:-1] if nType == 'float' else fName, t=nType,
+        for fName in results['one']:
+            body += one_t.substitute(fName=fName, fNameM=fName[:-1] if nType == 'float' else fName, t=nType,
                                     tc=nType.capitalize())
+        two_t = Template("""    @Test
+    public void test${fName}() {
+        cudaMath${tc}.${fNameM}(N, x, y, result);
+    }
+
+""")
+        for fName in results['two']:
+            body += two_t.substitute(fName=fName, fNameM=fName[:-1] if nType == 'float' else fName, t=nType,
+                                     tc=nType.capitalize())
 
         file.write(Template(test_java_template).substitute(f='', t=nType, tc=nType.capitalize(), body=body))
         file.truncate()
@@ -205,7 +223,7 @@ for aType in [{'t': 'float', 'd': 'SINGLE'}, {'t': 'double', 'd': 'DOUBLE'}]:
     updateCuFile(results, nType)
     updateEnum(results, nType)
     updateMainJavaFile(results, nType)
-    # updateTestJavaFile(results['one'], nType)
+    updateTestJavaFile(results, nType)
 
 # for key, value in resultFloat.iteritems():
 #     print("%s: %i" % (key, len(value)))

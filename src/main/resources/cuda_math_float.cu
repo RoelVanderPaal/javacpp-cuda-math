@@ -439,3 +439,93 @@ __global__ void math_y1f(size_t n, float *result, float  *x) {
     }
 }
 
+extern "C"
+__global__ void math_atan2f(size_t n, float *result, float  *x, float  *y) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+    {
+        result[id] = atan2f(x[id],y[id]);
+    }
+}
+
+extern "C"
+__global__ void math_copysignf(size_t n, float *result, float  *x, float  *y) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+    {
+        result[id] = copysignf(x[id],y[id]);
+    }
+}
+
+extern "C"
+__global__ void math_fdimf(size_t n, float *result, float  *x, float  *y) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+    {
+        result[id] = fdimf(x[id],y[id]);
+    }
+}
+
+extern "C"
+__global__ void math_fmaxf(size_t n, float *result, float  *x, float  *y) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+    {
+        result[id] = fmaxf(x[id],y[id]);
+    }
+}
+
+extern "C"
+__global__ void math_fminf(size_t n, float *result, float  *x, float  *y) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+    {
+        result[id] = fminf(x[id],y[id]);
+    }
+}
+
+extern "C"
+__global__ void math_fmodf(size_t n, float *result, float  *x, float  *y) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+    {
+        result[id] = fmodf(x[id],y[id]);
+    }
+}
+
+extern "C"
+__global__ void math_nextafterf(size_t n, float *result, float  *x, float  *y) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+    {
+        result[id] = nextafterf(x[id],y[id]);
+    }
+}
+
+extern "C"
+__global__ void math_powf(size_t n, float *result, float  *x, float  *y) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+    {
+        result[id] = powf(x[id],y[id]);
+    }
+}
+
+extern "C"
+__global__ void math_remainderf(size_t n, float *result, float  *x, float  *y) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+    {
+        result[id] = remainderf(x[id],y[id]);
+    }
+}
+
+extern "C"
+__global__ void math_rhypotf(size_t n, float *result, float  *x, float  *y) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+    {
+        result[id] = rhypotf(x[id],y[id]);
+    }
+}
+

@@ -15,9 +15,20 @@ __global__ void math_${f}(size_t n, $t *result, $t  *x) {
 
 """
 
+two_template = """extern "C"
+__global__ void math_${f}(size_t n, $t *result, $t  *x, $t  *y) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+    {
+        result[id] = ${f}(x[id],y[id]);
+    }
+}
+
+"""
+
 enum_template = """package com.mosco.javacpp_cuda_math;
 
-public enum OneParam$t {
+public enum Functions$t {
     $enums
 }
 """
@@ -26,6 +37,7 @@ main_java_template = """package com.mosco.javacpp_cuda_math;
 
 import org.bytedeco.javacpp.IntPointer;
 import org.bytedeco.javacpp.LongPointer;
+import org.bytedeco.javacpp.Pointer;
 
 import java.io.IOException;
 
@@ -36,8 +48,13 @@ public class CudaMath$tc extends AbstractCudaMath {
 
 $body
 
-    private void call(OneParam$tc f, int n, IntPointer intPointer, LongPointer result, LongPointer x) {
-        super.call(f.name(), n, intPointer, result, x);
+    private void call(Functions$tc f, int n, Pointer... pointers) {
+        Pointer[] all = new Pointer[pointers.length + 1];
+        all[0] = new IntPointer(new int[]{n});
+        for (int i = 0; i < pointers.length; i++) {
+            all[i + 1] = pointers[i];
+        }
+        super.call(f.name(), n, all);
     }
 }
 """
@@ -119,33 +136,46 @@ def parseDocumentation(filename, nType):
     return result
 
 
-def updateCuFile(fNames, nType):
+def updateCuFile(results, nType):
     with open('src/main/resources/cuda_math_' + nType + '.cu', 'w+') as file:
         file.seek(0)
-        s = Template(one_template)
-        for fName in fNames:
-            file.write(s.substitute(f=fName, t=nType))
+        t_one = Template(one_template)
+        for fName in results['one']:
+            file.write(t_one.substitute(f=fName, t=nType))
+        t_two = Template(two_template)
+        for fName in results['two']:
+            file.write(t_two.substitute(f=fName, t=nType))
         file.truncate()
 
 
-def updateEnum(fNames, nType):
-    with open('src/main/java/com/mosco/javacpp_cuda_math/OneParam' + nType.capitalize() + '.java', 'w+') as file:
+def updateEnum(results, nType):
+    with open('src/main/java/com/mosco/javacpp_cuda_math/Functions' + nType.capitalize() + '.java', 'w+') as file:
         file.seek(0)
-        file.write(Template(enum_template).substitute(enums=','.join(fNames), t=nType.capitalize()))
+        file.write(Template(enum_template).substitute(enums=','.join(results['one']) + ',' + ','.join(results['two']),
+                                                      t=nType.capitalize()))
         file.truncate()
 
 
-def updateMainJavaFile(fNames, nType):
+def updateMainJavaFile(results, nType):
     with open('src/main/java/com/mosco/javacpp_cuda_math/CudaMath' + nType.capitalize() + '.java', 'w+') as file:
         file.seek(0)
-        funt = Template("""    public void ${fNameM}(int n, LongPointer x, LongPointer result) {
-        call(OneParam${tc}.$fName, n, new IntPointer(new int[]{n}), result, x);
+        body = ''
+        one_t = Template("""    public void ${fNameM}(int n, LongPointer x, LongPointer result) {
+        call(Functions${tc}.$fName, n, result, x);
     }
 
 """)
-        body = ''
-        for fName in fNames:
-            body += funt.substitute(fName=fName, fNameM=fName[:-1] if nType == 'float' else fName, tc=nType.capitalize())
+        for fName in results['one']:
+            body += one_t.substitute(fName=fName, fNameM=fName[:-1] if nType == 'float' else fName,
+                                     tc=nType.capitalize())
+        two_t = Template("""    public void ${fNameM}(int n, LongPointer x, LongPointer y, LongPointer result) {
+        call(Functions${tc}.$fName, n, result, x, y);
+    }
+
+""")
+        for fName in results['two']:
+            body += two_t.substitute(fName=fName, fNameM=fName[:-1] if nType == 'float' else fName,
+                                     tc=nType.capitalize())
 
         file.write(Template(main_java_template).substitute(f='', t=nType, tc=nType.capitalize(), body=body))
         file.truncate()
@@ -162,7 +192,8 @@ def updateTestJavaFile(fNames, nType):
 """)
         body = ''
         for fName in fNames:
-            body += funt.substitute(fName=fName, fNameM=fName[:-1] if nType == 'float' else fName, t=nType, tc=nType.capitalize())
+            body += funt.substitute(fName=fName, fNameM=fName[:-1] if nType == 'float' else fName, t=nType,
+                                    tc=nType.capitalize())
 
         file.write(Template(test_java_template).substitute(f='', t=nType, tc=nType.capitalize(), body=body))
         file.truncate()
@@ -171,10 +202,10 @@ def updateTestJavaFile(fNames, nType):
 for aType in [{'t': 'float', 'd': 'SINGLE'}, {'t': 'double', 'd': 'DOUBLE'}]:
     nType = aType['t']
     results = parseDocumentation(docDir + 'group__CUDA__MATH__' + aType['d'] + '.html', nType)
-    updateCuFile(results['one'], nType)
-    updateEnum(results['one'], nType)
-    updateMainJavaFile(results['one'], nType)
-    updateTestJavaFile(results['one'], nType)
+    updateCuFile(results, nType)
+    updateEnum(results, nType)
+    updateMainJavaFile(results, nType)
+    # updateTestJavaFile(results['one'], nType)
 
 # for key, value in resultFloat.iteritems():
 #     print("%s: %i" % (key, len(value)))

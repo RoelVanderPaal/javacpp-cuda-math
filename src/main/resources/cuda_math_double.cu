@@ -439,3 +439,84 @@ __global__ void math_y1(size_t n, double *result, double  *x) {
     }
 }
 
+extern "C"
+__global__ void math_atan2(size_t n, double *result, double  *x, double  *y) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+    {
+        result[id] = atan2(x[id],y[id]);
+    }
+}
+
+extern "C"
+__global__ void math_copysign(size_t n, double *result, double  *x, double  *y) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+    {
+        result[id] = copysign(x[id],y[id]);
+    }
+}
+
+extern "C"
+__global__ void math_fdim(size_t n, double *result, double  *x, double  *y) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+    {
+        result[id] = fdim(x[id],y[id]);
+    }
+}
+
+extern "C"
+__global__ void math_fmin(size_t n, double *result, double  *x, double  *y) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+    {
+        result[id] = fmin(x[id],y[id]);
+    }
+}
+
+extern "C"
+__global__ void math_fmod(size_t n, double *result, double  *x, double  *y) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+    {
+        result[id] = fmod(x[id],y[id]);
+    }
+}
+
+extern "C"
+__global__ void math_nextafter(size_t n, double *result, double  *x, double  *y) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+    {
+        result[id] = nextafter(x[id],y[id]);
+    }
+}
+
+extern "C"
+__global__ void math_pow(size_t n, double *result, double  *x, double  *y) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+    {
+        result[id] = pow(x[id],y[id]);
+    }
+}
+
+extern "C"
+__global__ void math_remainder(size_t n, double *result, double  *x, double  *y) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+    {
+        result[id] = remainder(x[id],y[id]);
+    }
+}
+
+extern "C"
+__global__ void math_rhypot(size_t n, double *result, double  *x, double  *y) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+    {
+        result[id] = rhypot(x[id],y[id]);
+    }
+}
+

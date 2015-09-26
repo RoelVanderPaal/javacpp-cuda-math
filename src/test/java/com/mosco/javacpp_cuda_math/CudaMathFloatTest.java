@@ -4,7 +4,6 @@ import static org.bytedeco.javacpp.cuda.*;
 
 import org.bytedeco.javacpp.FloatPointer;
 import org.bytedeco.javacpp.LongPointer;
-import org.bytedeco.javacpp.cuda;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

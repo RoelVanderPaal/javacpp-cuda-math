@@ -10,12 +10,12 @@ import java.util.logging.Logger;
 
 import static org.bytedeco.javacpp.cuda.*;
 
-abstract public class AbstractCudaMath {
-    public static final Logger LOGGER = Logger.getLogger(AbstractCudaMath.class.getName());
+abstract class AbstractCudaMath {
+    private static final Logger LOGGER = Logger.getLogger(AbstractCudaMath.class.getName());
     private cuda.CUmod_st module;
     private int blockDimX;
 
-    public AbstractCudaMath(String nType) throws IOException {
+    AbstractCudaMath(String nType) throws IOException {
         super();
         cuda.CUctx_st context = new cuda.CUctx_st();
         LOGGER.log(Level.FINE, "Checking if CUDA context exists");
@@ -34,7 +34,7 @@ abstract public class AbstractCudaMath {
         LOGGER.log(Level.FINE, "MAX_BLOCK_DIM_X: " + blockDimX);
 
         String kernelFileName = "/cuda_math_" + nType + "_" + System.getProperty("sun.arch.data.model") + ".ptx";
-        LOGGER.log(Level.FINE, "Openining kernel: " + kernelFileName);
+        LOGGER.log(Level.FINE, "Opening kernel: " + kernelFileName);
         InputStream ptxStream = AbstractCudaMath.class.getResourceAsStream(kernelFileName);
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         int nRead;
@@ -60,10 +60,10 @@ abstract public class AbstractCudaMath {
         }
     }
 
-    public void call(String functionName, int n, Pointer... pointers) {
+    void call(String functionName, int n, Pointer... pointers) {
         cuda.CUfunc_st function = new cuda.CUfunc_st();
         checkResult(cuda.cuModuleGetFunction(function, this.module, "math_" + functionName));
-        PointerPointer pointerPointer = new PointerPointer(pointers);
+        @SuppressWarnings("unchecked") PointerPointer pointerPointer = new PointerPointer(pointers);
 
         int gridDimX = (int) Math.ceil((double) n / blockDimX);
         LOGGER.log(Level.FINE, "Launching kernel 'math_" + functionName + "' with gridDimX/blockDimX: " + gridDimX + "/" + blockDimX);

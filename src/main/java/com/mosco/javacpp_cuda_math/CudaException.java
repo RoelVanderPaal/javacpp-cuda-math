@@ -1,7 +1,7 @@
 package com.mosco.javacpp_cuda_math;
 
 public class CudaException extends RuntimeException {
-    private int errorCode;
+    private final int errorCode;
 
     public CudaException(int errorCode, String message) {
         super(message);

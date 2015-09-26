@@ -65,7 +65,6 @@ import static org.bytedeco.javacpp.cuda.*;
 
 import org.bytedeco.javacpp.${tc}Pointer;
 import org.bytedeco.javacpp.LongPointer;
-import org.bytedeco.javacpp.cuda;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -122,19 +121,19 @@ $body
 """
 
 
-def parseDocumentation(filename, nType):
+def parseDocumentation(filename, n_type):
     soup = BeautifulSoup(open(filename))
     result = {'one': [], 'two': [], 'rest': [], 'error': []}
     for dt in soup.body.dl.find_all("dt"):
         contents = dt.span.contents
         if len(contents) >= 3:
-            rType = contents[3].strip().strip(u'\u200B').strip()
+            r_type = contents[3].strip().strip(u'\u200B').strip()
             contents2 = dt.contents[1].contents
             params = [contents2[i].strip(' (,') for i in range(1, len(contents2) - 1, 3)]
             mName = dt.contents[1].a.string
-            if (rType == nType and params == [nType]):
+            if r_type == n_type and params == [n_type]:
                 result['one'].append(mName)
-            elif (rType == nType and params == [nType, nType]):
+            elif r_type == n_type and params == [n_type, n_type]:
                 result['two'].append(mName)
             else:
                 result['rest'].append(mName)
@@ -146,15 +145,15 @@ def parseDocumentation(filename, nType):
 
 
 def updateCuFile(results, nType):
-    with open('src/main/resources/cuda_math_' + nType + '.cu', 'w+') as file:
-        file.seek(0)
+    with open('src/main/resources/cuda_math_' + nType + '.cu', 'w+') as cuFile:
+        cuFile.seek(0)
         t_one = Template(one_template)
         for fName in results['one']:
-            file.write(t_one.substitute(f=fName, t=nType))
+            cuFile.write(t_one.substitute(f=fName, t=nType))
         t_two = Template(two_template)
         for fName in results['two']:
-            file.write(t_two.substitute(f=fName, t=nType))
-        file.truncate()
+            cuFile.write(t_two.substitute(f=fName, t=nType))
+        cuFile.truncate()
 
 
 def updateEnum(results, nType):
@@ -202,7 +201,7 @@ def updateTestJavaFile(results, nType):
 """)
         for fName in results['one']:
             body += one_t.substitute(fName=fName, fNameM=fName[:-1] if nType == 'float' else fName, t=nType,
-                                    tc=nType.capitalize())
+                                     tc=nType.capitalize())
         two_t = Template("""    @Test
     public void test${fName}() {
         cudaMath${tc}.${fNameM}(N, x, y, result);
